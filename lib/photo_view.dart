@@ -254,6 +254,7 @@ class PhotoView extends StatefulWidget {
     this.scaleStateCycle,
     this.onTapUp,
     this.onTapDown,
+    this.onScaleStart,
     this.onScaleEnd,
     this.customSize,
     this.gestureDetectorBehavior,
@@ -291,6 +292,7 @@ class PhotoView extends StatefulWidget {
     this.scaleStateCycle,
     this.onTapUp,
     this.onTapDown,
+    this.onScaleStart,
     this.onScaleEnd,
     this.customSize,
     this.gestureDetectorBehavior,
@@ -389,6 +391,10 @@ class PhotoView extends StatefulWidget {
   /// A pointer that might cause a tap has contacted the screen at a particular
   /// location.
   final PhotoViewImageTapDownCallback? onTapDown;
+
+  /// A pointer that will trigger a scale start contacting the screen at a
+  /// particular location.
+  final PhotoViewImageScaleStartCallback? onScaleStart;
 
   /// A pointer that will trigger a scale has stopped contacting the screen at a
   /// particular location.
@@ -528,6 +534,7 @@ class _PhotoViewState extends State<PhotoView>
                 scaleStateCycle: widget.scaleStateCycle,
                 onTapUp: widget.onTapUp,
                 onTapDown: widget.onTapDown,
+                onScaleStart: widget.onScaleStart,
                 onScaleEnd: widget.onScaleEnd,
                 outerSize: computedOuterSize,
                 gestureDetectorBehavior: widget.gestureDetectorBehavior,
@@ -555,6 +562,7 @@ class _PhotoViewState extends State<PhotoView>
                 scaleStateCycle: widget.scaleStateCycle,
                 onTapUp: widget.onTapUp,
                 onTapDown: widget.onTapDown,
+                onScaleStart: widget.onScaleStart,
                 onScaleEnd: widget.onScaleEnd,
                 outerSize: computedOuterSize,
                 gestureDetectorBehavior: widget.gestureDetectorBehavior,
@@ -608,6 +616,13 @@ typedef PhotoViewImageTapUpCallback = Function(
 typedef PhotoViewImageTapDownCallback = Function(
   BuildContext context,
   TapDownDetails details,
+  PhotoViewControllerValue controllerValue,
+);
+
+/// A type definition for a callback when a user start scale
+typedef PhotoViewImageScaleStartCallback = Function(
+  BuildContext context,
+  ScaleStartDetails details,
   PhotoViewControllerValue controllerValue,
 );
 

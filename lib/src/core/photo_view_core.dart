@@ -5,6 +5,7 @@ import 'package:photo_view/photo_view.dart'
         PhotoViewHeroAttributes,
         PhotoViewImageTapDownCallback,
         PhotoViewImageTapUpCallback,
+        PhotoViewImageScaleStartCallback,
         PhotoViewImageScaleEndCallback,
         ScaleStateCycle;
 import 'package:photo_view/src/controller/photo_view_controller.dart';
@@ -31,6 +32,7 @@ class PhotoViewCore extends StatefulWidget {
     required this.enableRotation,
     required this.onTapUp,
     required this.onTapDown,
+    required this.onScaleStart,
     required this.onScaleEnd,
     required this.gestureDetectorBehavior,
     required this.controller,
@@ -54,6 +56,7 @@ class PhotoViewCore extends StatefulWidget {
     required this.enableRotation,
     this.onTapUp,
     this.onTapDown,
+    this.onScaleStart,
     this.onScaleEnd,
     this.gestureDetectorBehavior,
     required this.controller,
@@ -87,6 +90,7 @@ class PhotoViewCore extends StatefulWidget {
 
   final PhotoViewImageTapUpCallback? onTapUp;
   final PhotoViewImageTapDownCallback? onTapDown;
+  final PhotoViewImageScaleStartCallback? onScaleStart;
   final PhotoViewImageScaleEndCallback? onScaleEnd;
 
   final HitTestBehavior? gestureDetectorBehavior;
@@ -141,6 +145,7 @@ class PhotoViewCoreState extends State<PhotoViewCore>
   }
 
   void onScaleStart(ScaleStartDetails details) {
+    widget.onScaleStart?.call(context, details, controller.value);
     _rotationBefore = controller.rotation;
     _scaleBefore = scale;
     _normalizedPosition = details.focalPoint - controller.position;
@@ -153,8 +158,9 @@ class PhotoViewCoreState extends State<PhotoViewCore>
     final double newScale = _scaleBefore! * details.scale;
     final Offset delta = details.focalPoint - _normalizedPosition!;
 
-    if (widget.strictScale && (newScale > widget.scaleBoundaries.maxScale ||
-        newScale < widget.scaleBoundaries.minScale)) {
+    if (widget.strictScale &&
+        (newScale > widget.scaleBoundaries.maxScale ||
+            newScale < widget.scaleBoundaries.minScale)) {
       return;
     }
 
